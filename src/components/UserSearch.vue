@@ -13,7 +13,7 @@
             <v-btn
               id="outer-search-btn"
               outlined
-              @click="searchClicked()"
+              @click="emitSearchClicked()"
             >Buscar</v-btn>
           </template>
         </v-text-field>
@@ -37,8 +37,13 @@ export default {
       }
     }
   },
+  mounted () {
+    addEventListener('keypress', ({key}) => {
+      if(key==='Enter') this.emitSearchClicked()
+    })
+  },
   methods: {
-    searchClicked() {
+    emitSearchClicked() {
       this.$emit('search-clicked')
     }
   }

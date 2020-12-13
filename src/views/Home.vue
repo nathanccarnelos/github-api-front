@@ -1,8 +1,9 @@
 <template>
   <div class="home">
     <user-search @search-clicked="searchUser()" v-model="username" :loading="loading"></user-search>
-    <v-container v-if="result && !loading">
-      <v-card>
+    <v-container >
+      <v-alert v-if="showError" type="warning">Nenhum Resultado encontrado, tente novamente</v-alert>
+      <v-card v-if="result && !loading">
         <v-card-title>
           <v-avatar>
             <img
@@ -10,17 +11,9 @@
                 :src="result['avatar_url']"
             >
           </v-avatar>
-          <v-icon>fa-github</v-icon>
           <div class="pl-4">{{result.name}}</div>
         </v-card-title>
-        <v-row>
-          <v-col sm="6">
-            <repos-list :username="username"></repos-list>
-          </v-col>
-          <v-col sm="6">
-            <starred-list :username="username"/>
-          </v-col>
-        </v-row>
+        <action-buttons :username="username" />
       </v-card>
     </v-container>
   </div>
@@ -29,22 +22,21 @@
 <script>
 import UserSearch from '../components/UserSearch'
 import { getUser } from '../services/users'
-import StarredList from '../components/StarredList'
-import ReposList from '../components/ReposList'
+import ActionButtons from '../components/ActionButtons'
 
 export default {
   name: 'Home',
   components: {
-    UserSearch,
-    StarredList,
-    ReposList
+    ActionButtons,
+    UserSearch
   },
   data () {
     return {
       result: null,
       repos: [],
       username: '',
-      loading: false
+      loading: false,
+      showError: false
     }
   },
   mounted () {
@@ -56,12 +48,14 @@ export default {
   methods: {
     searchUser () {
       this.loading = true
+      this.showError = false
+      this.result = null
       getUser(this.username)
         .then(resp => {
           this.result = resp
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err) => {
+          if(err.response.status === 404) this.showError = true
         })
       .finally(()=> {
         this.loading = false
