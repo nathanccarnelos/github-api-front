@@ -6,6 +6,7 @@
         block
         primary
         v-if="!showList"
+        :data-testid="`${title}-button`"
     >Buscar {{title}}
     </v-btn>
     <v-card
@@ -13,7 +14,7 @@
         class="mx-auto"
         max-width="100%"
     >
-      <v-list class="overflow-auto" dense height="50vh">
+      <v-list class="overflow-auto" dense height="50vh" :data-testid="`${title}-list`">
         <v-subheader>{{title}}</v-subheader>
         <v-list-item-group>
           <v-list-item

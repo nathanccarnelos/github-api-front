@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="text-center">
-      <v-col cols="12">
+      <v-col cols="12" data-testid="search-field">
         <v-text-field
             outlined
             v-model="username"
@@ -11,6 +11,7 @@
         >
           <template #append-outer>
             <v-btn
+              data-testid="search-button"
               id="outer-search-btn"
               outlined
               @click="emitSearchClicked()"

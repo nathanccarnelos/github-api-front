@@ -11,7 +11,7 @@
                 :src="result['avatar_url']"
             >
           </v-avatar>
-          <div class="pl-4">{{result.name}}</div>
+          <div class="pl-4" data-testid="user-name">{{result.name}}</div>
         </v-card-title>
         <action-buttons :username="username" />
       </v-card>
